@@ -1,0 +1,7 @@
+{
+  "gateway_id": "{GATEWAY_ID}",
+  "gateway_url": "https://{GATEWAY_ID}.gateway.bedrock-agentcore.ap-northeast-1.amazonaws.com/mcp",
+  "client_id": "{COGNITO_CLIENT_ID_3}",
+  "client_secret": "{COGNITO_CLIENT_SECRET_2}",
+  "token_endpoint": "https://agentcore-d046cb6e.auth.ap-northeast-1.amazoncognito.com/oauth2/token"
+}

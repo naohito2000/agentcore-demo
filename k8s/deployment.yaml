@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slack-devops-assistant
+  namespace: apps
+  labels:
+    app: slack-devops-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slack-devops-assistant
+  template:
+    metadata:
+      labels:
+        app: slack-devops-assistant
+    spec:
+      serviceAccountName: slack-devops-assistant
+      containers:
+      - name: slack-bot
+        image: ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com/slack-devops-assistant:latest
+        imagePullPolicy: Always
+        env:
+        - name: SLACK_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: slack-credentials
+              key: bot-token
+        - name: SLACK_APP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: slack-credentials
+              key: app-token
+        - name: MEMORY_ID
+          valueFrom:
+            configMapKeyRef:
+              name: agentcore-config
+              key: memory-id
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: agentcore-config
+              key: aws-region
+        - name: GATEWAY_URL
+          valueFrom:
+            configMapKeyRef:
+              name: agentcore-config
+              key: gateway-url
+        - name: GATEWAY_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: gateway-credentials
+              key: client-id
+        - name: GATEWAY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: gateway-credentials
+              key: client-secret
+        - name: GATEWAY_TOKEN_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: agentcore-config
+              key: gateway-token-endpoint
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
